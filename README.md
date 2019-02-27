@@ -16,7 +16,6 @@ To build:
 1. Type 'cargo build --release' and see '/target/release/'
 
 Next steps: command line options for
-1. optional generation of images
-1. optional walking of the tree vs current directory
-1. accepting one or more file paths to build a subset
-1. error message if openscad is not in the path
+1. passing in the directory to build (vs current directory)
+1. passing parameters to all openscad files built
+1. informative error message if openscad is not in the path
