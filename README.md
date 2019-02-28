@@ -4,7 +4,7 @@ Cross-platform parallel .stl and .png batch generation from .scad files
 Pre-built binaries for Linux (.tar.gz) and Windows (.zip) are provided.
 
 To run:
-1. Install (OpenSCAD)[https://www.openscad.org/] to your executable path ('c:\Program Files\OpenSCAD' or on Linux perhaps '~/bin/openscadversionblah.AppImage')
+1. Install [OpenSCAD](https://www.openscad.org/) to your executable path ('c:\Program Files\OpenSCAD' or on Linux perhaps '~/bin/openscadversionblah.AppImage')
 1. Decompress the appropriate binary for your platform
 1. Invoke the binary in the root of a directory tree containing '.scad' models. The '.stl' and '.png' files for each which is not just a library will be built.  
 
