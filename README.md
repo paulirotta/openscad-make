@@ -1,7 +1,7 @@
 # openscad-make
 Cross-platform parallel .stl and .png batch generation from .scad files
 
-[openscad-make screen shot](img/openscad-make-screen-shot.png)
+![openscad-make screen shot](img/openscad-make-screen-shot.png)
 
 Pre-built binaries for Linux (.tar.gz) and Windows (.zip) are provided.
 
