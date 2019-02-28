@@ -19,3 +19,6 @@ Next steps: command line options for
 1. passing in the directory to build (vs current directory)
 1. passing parameters to all openscad files built
 1. informative error message if openscad is not in the path
+
+[openscad-make screen shot](img/openscad-make-screen-shot.png "OpenSCAD Make Screen Shot")
+
