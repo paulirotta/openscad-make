@@ -1,6 +1,7 @@
 extern crate glob;
 use self::glob::glob;
 use rayon::prelude::*;
+use rayon::join;
 use std::ops::Add;
 use std::process::Command;
 
@@ -12,20 +13,20 @@ fn main() {
         (version: "0.2")
         (author: "Paul Houghton <paulirotta@gmail.com>")
         (about: "Build multiple OpenSCAD models in parallel")
-        (@arg image: -i --image "Also generate preview images of each model")
+        (@arg stl: -e --stl "Generate each model")
+        (@arg image: -i --image "Generate preview images of each model")
         (@arg recurse: -r --recurse "Walk all subdirectories")
     )
     .get_matches();
 
+    let stl = matches.is_present("stl");
     let image = matches.is_present("image");
     let recurse = matches.is_present("recurse");
-
     let pattern = if recurse { "**/*.scad" } else { "*.scad" };
 
-    println!("--- openscad-make ---");
-    println!("All OpenSCAD models will be built");
-    if image {
-        println!("Preview images will be generated");
+    println!("--- openscad-render_stl ---");
+    if !(stl || image) {
+        println!("'--help' for options");
     }
     if recurse {
         println!("All subdirectories will be walked recursively");
@@ -43,22 +44,34 @@ fn main() {
         })
         .collect();
 
-    let _result: Vec<String> = paths.par_iter().map(|path| make(path, image)).collect();
 
-    println!("End .SCAD file build");
+    join(|| {
+        if stl {
+            println!("stl models will be generated");
+            let _stl_result: Vec<String> = paths.par_iter().map(|path| render_stl(path)).collect();
+        }
+    }, || {
+        if image {
+            println!("png images will be generated");
+            let _image_result: Vec<String> = paths.par_iter().map(|path| render_image(path)).collect();
+        }
+    });
+
+
+    println!("End openscad-build");
     println!();
 }
 
 // Make an .STL file from .SCAD
-fn make(scad_path: &str, image: bool) -> String {
-    println!("Render {}", scad_path);
+fn render_stl(scad_path: &str) -> String {
+    println!("Render stl {}", scad_path);
 
     let path = String::from(scad_path);
-    let part = path
+    let root = path
         .split('.')
         .next()
         .expect("Can not split filename at '.'");
-    let mute = String::with_capacity(scad_path.len()).add(part).add(".stl");
+    let mute = String::with_capacity(scad_path.len()).add(root).add(".stl");
 
     let output = Command::new("openscad")
         .arg("-o")
@@ -69,26 +82,27 @@ fn make(scad_path: &str, image: bool) -> String {
 
     if output.status.success() {
         println!("STL render complete: {}", &scad_path);
-        if image {
-            render_image(&path, &part);
-        }
 
         String::from(scad_path)
     } else {
+        let e = String::from_utf8(output.stderr)
+                .expect("Error during model render, but I can not show it");
         eprintln!(
             "{} model build error: {}",
-            scad_path,
-            String::from_utf8(output.stderr)
-                .expect("Error during model render, but I can not show it")
-        );
+            scad_path, e);
 
-        String::from("Error")
+        String::from(e)
     }
 }
 
 // Render the SCAD file as a PNG image
-fn render_image(scad_path: &String, root: &str) {
+fn render_image(scad_path: &str) -> String {
     println!("Render image {}", scad_path);
+    let path = String::from(scad_path);
+    let root = path
+        .split('.')
+        .next()
+        .expect("Can not split filename at '.'");
     let png = String::with_capacity(scad_path.len()).add(root).add(".png");
 
     let output = Command::new("openscad")
@@ -101,12 +115,15 @@ fn render_image(scad_path: &String, root: &str) {
 
     if output.status.success() {
         println!("PNG render complete: {}", &scad_path);
+
+        String::from(scad_path)
     } else {
+        let e = String::from_utf8(output.stderr)
+                .expect("Error during image render, but I can not show it");
         eprintln!(
             "{} preview image error: {}",
-            png,
-            String::from_utf8(output.stderr)
-                .expect("Error during image render, but I can not show it")
-        );
+            png, e);
+
+        String::from(e)
     }
 }
