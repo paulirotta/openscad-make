@@ -13,7 +13,7 @@ fn main() {
         (version: "0.2")
         (author: "Paul Houghton <paulirotta@gmail.com>")
         (about: "Build multiple OpenSCAD models in parallel")
-        (@arg stl: -e --stl "Generate each model")
+        (@arg stl: -s --stl "Generate each model")
         (@arg image: -i --image "Generate preview images of each model")
         (@arg recurse: -r --recurse "Walk all subdirectories")
     )
