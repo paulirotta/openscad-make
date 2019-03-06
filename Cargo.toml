@@ -1,6 +1,6 @@
 [package]
 name = "openscad-make"
-version = "0.2.0"
+version = "0.3.0"
 authors = ["Paul Houghton <paulirotta@gmail.com>"]
 edition = "2018"
 
