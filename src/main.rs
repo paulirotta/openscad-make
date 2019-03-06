@@ -65,8 +65,7 @@ fn main() {
         },
     );
 
-    println!("End openscad-build");
-    println!();
+    println!("End {}\n", PKG_NAME);
 }
 
 // Make an .STL file from .SCAD
