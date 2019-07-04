@@ -110,7 +110,6 @@ fn render_image(scad_path: &str) -> String {
     let png = String::with_capacity(scad_path.len()).add(root).add(".png");
 
     let output = Command::new("openscad")
-        .arg("--render")
         .arg("-o")
         .arg(&png)
         .arg(scad_path)
