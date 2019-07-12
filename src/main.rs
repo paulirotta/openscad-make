@@ -118,7 +118,7 @@ fn render_image(scad_path: &str) -> String {
         .arg("--imgsize")
         .arg("1280,1024")
         .arg("--csglimit")
-        .arg("1000000")
+        .arg("10000000")
         .arg("--o")
         .arg(&png)
         .arg(scad_path)
