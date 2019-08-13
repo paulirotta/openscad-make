@@ -12,3 +12,5 @@ Cargo.lock
 # Visual Studio working files
 /.vs/
 
+# OSX
+.DS_Store
