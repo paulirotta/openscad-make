@@ -1,12 +1,12 @@
 [package]
 name = "openscad-make"
-version = "0.3.1"
+version = "0.3.2"
 authors = ["Paul Houghton <paulirotta@gmail.com>"]
 edition = "2018"
 
 [dependencies]
 glob = "0.3.0"
-rayon = "1.1.0"
+rayon = "1.2.1"
 clap = "2.33.0"
 
 [profile.release]
