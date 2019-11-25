@@ -3,7 +3,9 @@ Cross-platform parallel .stl and .png batch generation from .scad files
 
 ![openscad-make screen shot](img/openscad-make-screen-shot.png)
 
-Pre-built binaries for Linux (.tar.gz) and Windows (.zip) are provided.
+The fastest way to get support is on [Discord PELA Blocks](https://discord.gg/Yy2srz)
+
+Pre-built binaries for Linux (x86 and ARM .tar.gz), OSX (.zip) and Windows (.zip) are provided.
 
 To run:
 1. Install [OpenSCAD](https://www.openscad.org/) to your executable path ('c:\Program Files\OpenSCAD' or on Linux perhaps '~/bin/openscadversionblah.AppImage')
@@ -14,8 +16,8 @@ To run:
 To build:
 
 1. Install [Rust](https://rustup.rs/)
-1. Install C/C++ for your platform (build-essentials on Linux, Visual Studio on Windows)
-1. Type 'cargo build --release' and see '/target/release/'
+1. Install C/C++ for your platform (build-essentials on Linux, XCode with C/C++ command line tools, Visual Studio with C/C++ on Windows)
+1. Type 'cargo build --release'. The binary is in '/target/release/'
 
 Next steps: command line additions for
 1. overriding the directory to build (vs current directory)
