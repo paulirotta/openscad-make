@@ -23,7 +23,7 @@ To run on MacOS:
 
 Add the following to ~/.zshrc to add a 'openscad' for command line launch, then restart your shell for this command to take effect.
 
-'function openscad {
+'''function openscad {
     if [[ $# = 0 ]]
     then
         open -a "OpenSCAD"
@@ -32,6 +32,6 @@ Add the following to ~/.zshrc to add a 'openscad' for command line launch, then 
         [[ $1 = /* ]] && argPath="$1" || argPath="$PWD/${1#./}"
         open -a "OpenSCAD" --args "$argPath"
     fi
-}'
+}'''
 
 Issue reports and pull requests welcome.
