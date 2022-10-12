@@ -1,36 +1,55 @@
 extern crate glob;
 use self::glob::glob;
+use clap::Arg;
+use clap::ArgAction;
 use rayon::join;
 use rayon::prelude::*;
 use std::ops::Add;
-use std::process::Command;
-
-#[macro_use]
-extern crate clap;
 
 const VERSION: &'static str = env!("CARGO_PKG_VERSION");
 const AUTHORS: &'static str = env!("CARGO_PKG_AUTHORS");
 const PKG_NAME: &'static str = env!("CARGO_PKG_NAME");
 
 fn main() {
-    let matches = clap_app!(openscadmake =>
-        (version: VERSION)
-        (author: AUTHORS)
-        (about: "Build multiple OpenSCAD models in parallel")
-        (@arg stl: -s --stl "Generate each model")
-        (@arg image: -i --image "Generate preview images of each model")
-        (@arg recurse: -r --recurse "Walk all subdirectories")
-    )
-    .get_matches();
+    let matches = clap::Command::new("pacman")
+        .about("Build multiple OpenSCAD models in parallel")
+        .version(VERSION)
+        .subcommand_required(true)
+        .arg_required_else_help(true)
+        .author(AUTHORS)
+        .arg(
+            Arg::new("stl")
+                .short('s')
+                .long("stl")
+                .help("Generate each of these OpenSCAD models in parallel")
+                .action(ArgAction::Set)
+                .num_args(1..),
+        )
+        .arg(
+            Arg::new("image")
+                .short('i')
+                .long("image")
+                .help("Generate previem images of each of these OpenSCAD models in parallel")
+                .action(ArgAction::Set)
+                .num_args(1..),
+        )
+        .arg(
+            Arg::new("recurse")
+                .short('r')
+                .long("recurse")
+                .help("Walk all subdirectories"),
+        )
+        .get_matches();
 
-    let stl = matches.is_present("stl");
-    let image = matches.is_present("image");
-    let recurse = matches.is_present("recurse");
+    let stl = matches.contains_id("stl");
+    let image = matches.contains_id("image");
+    let recurse = matches.contains_id("recurse");
     let pattern = if recurse { "**/*.scad" } else { "*.scad" };
 
-    println!("--- {} ---", PKG_NAME);
+    println!("--- {PKG_NAME} ---");
     if !(stl || image) {
         println!("'--help' for options");
+        return;
     }
     if recurse {
         println!("All subdirectories will be walked recursively");
@@ -79,7 +98,7 @@ fn render_stl(scad_path: &str) -> String {
         .expect("Can not split filename at '.'");
     let mute = String::with_capacity(scad_path.len()).add(root).add(".stl");
 
-    let output = Command::new("openscad")
+    let output = std::process::Command::new("openscad")
         .arg("-o")
         .arg(&mute)
         .arg(scad_path)
@@ -109,7 +128,7 @@ fn render_image(scad_path: &str) -> String {
         .expect("Can not split filename at '.'");
     let png = String::with_capacity(scad_path.len()).add(root).add(".png");
 
-    let output = Command::new("openscad")
+    let output = std::process::Command::new("openscad")
         .arg("--colorscheme")
         .arg("BeforeDawn")
         .arg("--autocenter")
